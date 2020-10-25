@@ -1,2 +1,2 @@
-# opencv_python_demos
-My opencv demos written in language of Python
+# OpenCV-Python-Demos
+My python demos during learning OpenCV
