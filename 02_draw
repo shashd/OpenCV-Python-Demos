@@ -10,6 +10,13 @@ cv2.line, cv2.rectangle, cv2.circle, cv2.ellipse, cv2.polylines, cv2.putText
 
 
 class ImgDrawer(object):
+    def __init__(self):
+        # when mouse click, it turns to be true
+        self.drawing = False
+        # if mode is True, press m to draw curve
+        self.mode = True
+        # initial position x and y
+        self.ix, self.iy = -1, -1
 
     def set_empty_image(self):
         """
@@ -88,6 +95,56 @@ class ImgDrawer(object):
         cv2.putText(img_src, 'OpenCV', (10, 500), font, 4, (255, 255, 0), 2)
         return img_src
 
+    def get_mouse_event(self):
+        """
+        Get mouse event
+        :return:
+        """
+        events = [i for i in dir(cv2) if 'EVENT' in i]
+        print(events)
+
+    def draw_with_mouse(self):
+        """
+        Draw in a picture with mouse
+        """
+        img_src = cv2.imread("./images/1.jpg")
+        cv2.namedWindow("image", cv2.WINDOW_AUTOSIZE) # set auto sized window
+
+        # need to be a sub method
+        def draw_circle_by_mouse(event, x, y, flags, param):
+            """
+            Draw a circle with mouse
+            """
+            if event == cv2.EVENT_LBUTTONDBLCLK:
+                cv2.circle(img_src, (x, y), 100, (255, 0, 0), 2)
+
+        def advanced_draw_circle(event, x, y, flags, param):
+            ix, iy, drawing, mode = self.ix, self.iy, self.drawing, self.mode
+            if event == cv2.EVENT_LBUTTONDOWN:
+                drawing = True
+                ix, iy = x, y
+            # monitor mouse movement and apply drawing methods
+            elif event == cv2.EVENT_MOUSEMOVE and flags == cv2.EVENT_FLAG_LBUTTON:
+                if drawing is True:
+                    if mode is True:
+                        cv2.rectangle(img_src, (ix, iy), (x, y), (0, 255, 0), -1)
+                    else:
+                        cv2.circle(img_src, (x, y), 3, (0, 255, 255), 1)
+            # disable move and turn drawing to False
+            elif event == cv2.EVENT_LBUTTONUP:
+                drawing = False
+
+        # cv2.setMouseCallback("image",draw_circle_by_mouse)
+        cv2.setMouseCallback("image",advanced_draw_circle)
+
+        while True:
+            cv2.imshow("image",img_src)
+            if cv2.waitKey(20) & 0xFF == 27:
+                break
+        cv2.destroyAllWindows()
+
+
+
     def main(self):
         img = self.set_empty_image()
         img = self.draw_line(img)
@@ -100,6 +157,8 @@ class ImgDrawer(object):
         cv2.imshow("img",img)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
+
+        self.draw_with_mouse()
 
 
 if __name__ == '__main__':
