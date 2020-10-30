@@ -5,7 +5,7 @@ import numpy as np
 
 """
 Show drawing methods of opencv
-cv2.line, cv2.rectangle, cv2.circle, cv2.ellipse, cv2.polylines, cv2.putText
+cv2.line, cv2.rectangle, cv2.circle, cv2.ellipse, cv2.polylines, cv2.putText, cv2.setMouseCallback
 """
 
 
@@ -16,6 +16,15 @@ class ImgDrawer(object):
         # if mode is True, press m to draw curve
         self.mode = True
         # initial position x and y
+        self.ix = -1
+        self.iy = -1
+
+    def reset_param(self):
+        """
+        Reset param to initial values
+        """
+        self.drawing = False
+        self.mode = True
         self.ix, self.iy = -1, -1
 
     def set_empty_image(self):
@@ -141,24 +150,67 @@ class ImgDrawer(object):
             cv2.imshow("image",img_src)
             if cv2.waitKey(20) & 0xFF == 27:
                 break
+        # cv2.destroyAllWindows()
+
+    # todo: advanced_draw_circle还有问题，和make_tracebar差不多，都要更正
+    def make_tracebar(self):
+        """
+        Make a tracebar to create different colors
+        """
+        img_src = cv2.imread("./images/1.jpg")
+        cv2.namedWindow("image", cv2.WINDOW_AUTOSIZE) # set auto sized window
+
+        def nothing(x):
+            """
+            Do not do anything
+            """
+            pass
+
+        def draw_circle(event,x,y,flags,param):
+            r = cv2.getTrackbarPos("R","image")
+            g = cv2.getTrackbarPos("G","image")
+            b = cv2.getTrackbarPos("B","image")
+            color = (b,g,r)
+
+            ix, iy, drawing, mode = self.ix, self.iy, self.drawing, self.mode
+            if event == cv2.EVENT_LBUTTONDOWN:
+                drawing = True
+                ix, iy = x, y
+            elif event == cv2.EVENT_MOUSEMOVE and flags == cv2.EVENT_FLAG_LBUTTON:
+                if drawing:
+                    if mode:
+                        cv2.rectangle(img_src, (ix, iy), (x, y), color, -1)
+                    else:
+                        cv2.circle(img_src, (x, y), 3, color, 1)
+            elif event == cv2.EVENT_LBUTTONUP:
+                drawing = False
+
+        # nothing is the callback function
+        cv2.createTrackbar("R", "image", 0, 255, nothing)
+        cv2.createTrackbar("G", "image", 0, 255, nothing)
+        cv2.createTrackbar("B", "image", 0, 255, nothing)
+        cv2.setMouseCallback("image", draw_circle)
+        while True:
+            cv2.imshow("image",img_src)
+            if cv2.waitKey(20) & 0xFF == 27:
+                break
         cv2.destroyAllWindows()
-
-
 
     def main(self):
-        img = self.set_empty_image()
-        img = self.draw_line(img)
-        img = self.draw_rec(img)
-        img = self.draw_circle(img)
-        img = self.draw_ellipse(img)
-        img = self.draw_polygon(img)
-        img = self.paint_words(img)
-
-        cv2.imshow("img",img)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
-
+        # img = self.set_empty_image()
+        # img = self.draw_line(img)
+        # img = self.draw_rec(img)
+        # img = self.draw_circle(img)
+        # img = self.draw_ellipse(img)
+        # img = self.draw_polygon(img)
+        # img = self.paint_words(img)
+        #
+        # cv2.imshow("img",img)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
+        #
         self.draw_with_mouse()
+        # self.make_tracebar()
 
 
 if __name__ == '__main__':
