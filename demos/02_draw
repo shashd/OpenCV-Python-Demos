@@ -116,7 +116,7 @@ class ImgDrawer(object):
         """
         Draw in a picture with mouse
         """
-        img_src = cv2.imread("./images/1.jpg")
+        img_src = cv2.imread("../images/1.jpg")
         cv2.namedWindow("image", cv2.WINDOW_AUTOSIZE) # set auto sized window
 
         # need to be a sub method
@@ -157,7 +157,7 @@ class ImgDrawer(object):
         """
         Make a tracebar to create different colors
         """
-        img_src = cv2.imread("./images/1.jpg")
+        img_src = cv2.imread("../images/1.jpg")
         cv2.namedWindow("image", cv2.WINDOW_AUTOSIZE) # set auto sized window
 
         def nothing(x):

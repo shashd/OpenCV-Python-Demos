@@ -10,10 +10,10 @@ key words: cv2.read(), cv2.imwrite(),cv2.imshow(),cv2.VideoCapture(),cv2.cvtColo
 class IoDemo(object):
 
     def __init__(self):
-        self.in_path = "images/Lenna.jpg"
-        self.out_path = "images/"
-        self.video_path = "video/Crystal.mp4"
-        self.video_save_path = "video/temp.avi"
+        self.in_path = "../images/Lenna.jpg"
+        self.out_path = "../images/"
+        self.video_path = "../video/Crystal.mp4"
+        self.video_save_path = "../video/temp.avi"
 
     def read_image(self):
         """

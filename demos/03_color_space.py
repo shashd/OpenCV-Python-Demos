@@ -9,8 +9,8 @@ cv2.split, cv2.merge, cv2.cvtColor, cv2.inRange
 
 class ColorSpace(object):
     def __init__(self):
-        self.in_path = "images/Lenna.jpg"
-        self.out_path = "images/"
+        self.in_path = "../images/Lenna.jpg"
+        self.out_path = "../images/"
 
     def channel_split(self, img_src):
         """
